@@ -1,13 +1,11 @@
-// src/App.js
 import React from "react";
 import {
-  HashRouter,
+  BrowserRouter,
   Routes,
   Route,
   Navigate,
   Link,
-  useNavigate,
-  BrowserRouter
+  useNavigate
 } from "react-router-dom";
 
 import Login from "./components/pages/Login";
