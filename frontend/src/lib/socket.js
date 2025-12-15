@@ -1,7 +1,7 @@
 // src/lib/socket.js
 import { io } from "socket.io-client";
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:4000";
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || "https://escrowstack-backend.onrender.com";
 
 let socket = null;
 export function connectSocket(email) {
