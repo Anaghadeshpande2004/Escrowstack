@@ -6,7 +6,8 @@ import {
   Route,
   Navigate,
   Link,
-  useNavigate
+  useNavigate,
+  BrowserRouter
 } from "react-router-dom";
 
 import Login from "./components/pages/Login";
@@ -90,7 +91,7 @@ function MainLayout({ children }) {
 /* ---------- App ---------- */
 export default function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         {/* Default */}
         <Route path="/" element={<Navigate to="/login" replace />} />
@@ -111,6 +112,6 @@ export default function App() {
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
