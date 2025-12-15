@@ -1,36 +1,17 @@
 // src/App.js
 import React from "react";
 import {
-  BrowserRouter,
+  HashRouter,
   Routes,
   Route,
   Navigate,
   Link,
-  useNavigate,
-  HashRouter
+  useNavigate
 } from "react-router-dom";
 
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import Dashboard from "./components/pages/Dashboard";
-
-/* ---------- Auth helper ---------- */
-function isLoggedIn() {
-  try {
-    const e = localStorage.getItem("escrow_user_email");
-    return !!(e && e.length > 3);
-  } catch {
-    return false;
-  }
-}
-
-/* ---------- Protected Route ---------- */
-function ProtectedRoute({ children }) {
-  if (!isLoggedIn()) {
-    return <Navigate to="/login" replace />;
-  }
-  return children;
-}
 
 /* ---------- Header ---------- */
 function AppHeader() {
@@ -41,14 +22,13 @@ function AppHeader() {
     localStorage.removeItem("escrow_user_email");
     localStorage.removeItem("escrow_user_profile");
 
-    // disconnect socket safely
     try {
       const { getSocket } = require("./lib/socket");
       const s = getSocket();
       if (s) s.disconnect();
     } catch (e) {}
 
-    navigate("/login", { replace: true });
+    navigate("/login");
   }
 
   return (
@@ -63,17 +43,10 @@ function AppHeader() {
       }}
     >
       <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-        <Link
-          to="/dashboard"
-          style={{ color: "white", textDecoration: "none", fontWeight: 800 }}
-        >
+        <Link to="/dashboard" style={{ color: "white", textDecoration: "none", fontWeight: 800 }}>
           EscrowStack
         </Link>
-
-        <Link
-          to="/dashboard"
-          style={{ color: "rgba(255,255,255,0.85)", textDecoration: "none" }}
-        >
+        <Link to="/dashboard" style={{ color: "rgba(255,255,255,0.85)", textDecoration: "none" }}>
           Dashboard
         </Link>
       </div>
@@ -98,8 +71,8 @@ function AppHeader() {
   );
 }
 
-/* ---------- Protected Layout ---------- */
-function ProtectedLayout({ children }) {
+/* ---------- Layout ---------- */
+function MainLayout({ children }) {
   return (
     <div
       style={{
@@ -119,34 +92,24 @@ export default function App() {
   return (
     <HashRouter>
       <Routes>
-        {/* Root */}
-        <Route
-          path="/"
-          element={
-            isLoggedIn()
-              ? <Navigate to="/dashboard" replace />
-              : <Navigate to="/login" replace />
-          }
-        />
+        {/* Default */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
 
-        {/* Public routes */}
+        {/* Pages */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        {/* Protected route */}
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute>
-              <ProtectedLayout>
-                <Dashboard />
-              </ProtectedLayout>
-            </ProtectedRoute>
+            <MainLayout>
+              <Dashboard />
+            </MainLayout>
           }
         />
 
         {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </HashRouter>
   );
