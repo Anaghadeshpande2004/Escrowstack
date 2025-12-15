@@ -6,8 +6,4 @@ import App from "./App";
 import "./index.css"; // optional - CRA provides this
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
-);
+root.render(<App />);
