@@ -1,5 +1,6 @@
 // src/components/pages/Login.js
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -56,11 +57,11 @@ export default function Login() {
     localStorage.setItem("escrow_user_email", normalized);
     localStorage.setItem("escrow_user_password", password);
 
-    window.location.href = "/dashboard";
+       navigate("/dashboard");  
   }
 
   function goToRegister() {
-    window.location.href = "/register";
+    navigate("/register");
   }
 
   return (

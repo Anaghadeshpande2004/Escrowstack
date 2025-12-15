@@ -1,5 +1,6 @@
 // src/components/pages/Register.js
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -62,7 +63,7 @@ export default function Register() {
   }
 
   function goToLogin() {
-    window.location.href = "/login";
+   navigate("/login");
   }
 
   return (
