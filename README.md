@@ -51,14 +51,3 @@ Escrowstack/
 ## License
 This project is developed for academic purposes.
 
-
-
-You can **add screenshots** below the “Application Screens” section to score better in evaluation.
-
-If you want, I can:
-
-* Shorten this to **1-page README**
-* Make an **exam-oriented README**
-* Add **screenshots section properly**
-
-Just tell me 👍
