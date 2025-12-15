@@ -7,23 +7,27 @@ import React, { useEffect, useState, useRef } from "react";
   - Smooth, realistic sparkline using canvas
 */
 
-export default function StockCard({ ticker, initial, onToggleSubscribe, subscribed }) {
-  const [price, setPrice] = useState(initial || 0);
+export default function StockCard({ ticker, initial = 100, onToggleSubscribe, subscribed }) {
+  const [price, setPrice] = useState(initial);
   const [pct, setPct] = useState(0);
 
   const canvasRef = useRef(null);
   const historyRef = useRef([]);
 
-  // Seed initial history
+  /* ---------- Seed history ONCE ---------- */
   useEffect(() => {
-    if (initial) {
-      historyRef.current = Array.from({ length: 30 }, () => initial);
-      draw();
-    }
+    const base = initial || 100;
+
+    // Always seed some data so graph shows immediately
+    historyRef.current = Array.from({ length: 30 }, (_, i) =>
+      base + Math.sin(i / 2) * 2
+    );
+
+    draw();
     // eslint-disable-next-line
   }, []);
 
-  // Listen for price updates
+  /* ---------- Listen for price updates ---------- */
   useEffect(() => {
     const key = `price_update_${ticker}`;
 
@@ -33,7 +37,7 @@ export default function StockCard({ ticker, initial, onToggleSubscribe, subscrib
       setPrice(data.price);
       setPct(data.pctChange);
 
-      // Add realistic jitter so graph doesn't look flat
+      // small jitter for realism
       const noise = (Math.random() - 0.5) * 1.2;
       historyRef.current.push(data.price + noise);
 
@@ -46,16 +50,19 @@ export default function StockCard({ ticker, initial, onToggleSubscribe, subscrib
 
     window.addEventListener(key, handler);
     return () => window.removeEventListener(key, handler);
-    // eslint-disable-next-line
   }, [ticker]);
 
+  /* ---------- Draw sparkline ---------- */
   function draw() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
-    const w = canvas.width = 220;
-    const h = canvas.height = 60;
+
+    const w = 220;
+    const h = 60;
+    canvas.width = w;
+    canvas.height = h;
 
     ctx.clearRect(0, 0, w, h);
 
@@ -72,7 +79,6 @@ export default function StockCard({ ticker, initial, onToggleSubscribe, subscrib
     const scaleY = (v) =>
       h - pad - ((v - min) / (max - min || 1)) * (h - pad * 2);
 
-    // Gradient line
     const gradient = ctx.createLinearGradient(0, 0, w, 0);
     gradient.addColorStop(0, pct >= 0 ? "#22c55e" : "#fb7185");
     gradient.addColorStop(1, "#60a5fa");
@@ -96,7 +102,6 @@ export default function StockCard({ ticker, initial, onToggleSubscribe, subscrib
     });
     ctx.stroke();
 
-    // Remove glow for future draws
     ctx.shadowBlur = 0;
   }
 
@@ -147,10 +152,7 @@ export default function StockCard({ ticker, initial, onToggleSubscribe, subscrib
         </div>
       </div>
 
-      <canvas
-        ref={canvasRef}
-        style={{ width: "100%", height: 60 }}
-      />
+      <canvas ref={canvasRef} style={{ width: "100%", height: 60 }} />
     </div>
   );
 }
