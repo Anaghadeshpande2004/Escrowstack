@@ -6,7 +6,8 @@ import {
   Route,
   Navigate,
   Link,
-  useNavigate
+  useNavigate,
+  HashRouter
 } from "react-router-dom";
 
 import Login from "./components/pages/Login";
@@ -116,7 +117,7 @@ function ProtectedLayout({ children }) {
 /* ---------- App ---------- */
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         {/* Root */}
         <Route
@@ -147,6 +148,6 @@ export default function App() {
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
