@@ -1,4 +1,3 @@
-// src/components/pages/Register.js
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -6,7 +5,7 @@ export default function Register() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState(""); // NEW
+  const [password, setPassword] = useState(""); 
   const [err, setErr] = useState("");
 
   useEffect(() => {
@@ -60,7 +59,7 @@ export default function Register() {
     localStorage.setItem("escrow_user_profile", JSON.stringify(user));
     localStorage.setItem("escrow_user_email", user.email);
 
-    window.location.href = "/dashboard";
+      navigate("/dashboard");  
   }
 
   function goToLogin() {
